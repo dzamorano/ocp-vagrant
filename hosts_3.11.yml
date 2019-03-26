@@ -1,0 +1,54 @@
+[OSEv3:children]
+masters
+nodes
+etcd
+
+[OSEv3:vars]
+openshift_deployment_type=openshift-enterprise
+
+openshift_portal_net=172.30.0.0/16
+osm_cluster_network_cidr=10.128.0.0/14
+openshift_ip_check=false
+
+oreg_url=registry.access.redhat.com/openshift3/ose-${component}:${version}
+openshift_disable_check=disk_availability,docker_storage,memory_availability,package_availability,package_version,docker_image_availability
+
+openshift_release=${OCP_RELEASE}
+openshift_image_tag=v${OCP_VERSION}
+openshift_pkg_version=-${OCP_VERSION}
+
+openshift_enable_service_catalog=false
+template_service_broker_install=false
+openshift_install_examples=false
+openshift_management_install_management=false
+openshift_use_crio=false
+osm_use_cockpit=false
+openshift_logging_install_logging=false
+openshift_persistentlocalstorage_enabled=false
+openshift_hosted_manage_registry_console=false
+openshift_hosted_prometheus_deploy=false
+openshift_cluster_monitoring_operator_install=false
+
+openshift_web_console_install=true
+
+osn_storage_plugin_deps=['None']
+osm_custom_cors_origins=['0.0.0.0']
+
+openshift_docker_options="--log-driver json-file --log-opt max-size=1M --log-opt max-file=3"
+openshift_master_identity_providers=[{'name': 'allow_all', 'login': 'true', 'challenge': 'true', 'kind': 'AllowAllPasswordIdentityProvider'}]
+
+openshift_node_groups=[{'name': 'node-config-all-in-one', 'labels': ['node-role.kubernetes.io/master=true', 'node-role.kubernetes.io/infra=true', 'node-role.kubernetes.io/compute=true']}]
+
+ansible_connection=local
+ansible_ssh_user=vagrant
+ansible_become=no
+ansible_ssh_user=vagrant
+
+[masters]
+localhost
+
+[etcd]
+localhost openshift_ip=127.0.0.1
+
+[nodes]
+localhost openshift_node_group_name="node-config-all-in-one"
